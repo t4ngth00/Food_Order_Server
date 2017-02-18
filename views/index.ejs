@@ -1,24 +1,222 @@
-<!-- views/index.ejs -->
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html ng-app="Chatapp">
 <head>
-	<title>Node Authentication</title>
-	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"> <!-- load bootstrap css -->
-	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> <!-- load fontawesome -->
-	<style>
-		body 		{ padding-top:80px; }
-	</style>
+  <meta charset="UTF-8">
+  <title>Main page</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
+  <link href="css/style.css" rel="stylesheet">
+
+  <!-- semantic UI -->
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.7/semantic.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.7/semantic.js"></script>
+  <!-- angular  -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.0-rc.2/angular.js"></script>
 </head>
-<body>
-    <div class="container">
-        <div class="jumbotron text-center">
-            <h1><span class="fa fa-lock"></span> Node Authentication</h1>
 
-            <p>Login or Register with:</p>
+<body ng-controller="ChatCtrl">
 
-            <a href="/login" class="btn btn-default"><span class="fa fa-user"></span> Local Login</a>
-            <a href="/signup" class="btn btn-default"><span class="fa fa-user"></span> Local Signup</a>
-        </div>
+  <!-- navigation bar -->
+  <div class="ui top small attached icon menu">
+    <div class="header item">
+      Company name
     </div>
+    <a class="item active">
+      My Orders
+    </a>
+    <a class="item">
+      My Menu
+    </a>
+    <div class="right menu">
+      <div class="ui dropdown item">
+        Language <i class="dropdown icon"></i>
+        <div class="menu">
+          <a class="item">English</a>
+          <a class="item">Russian</a>
+          <a class="item">Spanish</a>
+        </div>
+      </div>
+      <div class="ui dropdown right icon item ">
+        <i class="icon setting large teal "></i>
+        <div class="menu">
+          <div class="item">
+            <a href="/profile" >Profile</a>
+          </div>
+          <div class="divider"></div>
+          <div class="item">
+            <a href="/logout" >Log out</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ui grid">
+    <div class="twelve wide stretched column">
+      <div class="ui bottom attached tab segment active" data-tab="first">
+        <!-- orders table -->
+        <table class="ui teal celled striped table">
+          <thead>
+            <tr><th colspan="9">
+              Available Orders
+            </th>
+          </tr></thead>
+          <thead>
+            <tr>
+              <th rowspan="2">Order ID</th>
+              <th colspan="5">Customer</th>
+              <th rowspan="2">Ordered Date</th>
+              <th rowspan="2">Dilivery Date</th>
+              <th rowspan="2">Status</th>
+            </tr>
+            <tr>
+              <th>First name</th>
+              <th>Last name</th>
+              <th>Email</th>
+              <th>Phone number</th>
+              <th>Address</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="row in rows">
+              <td>{{row.Order_id}}</td>
+              <td>{{row.First_name}}</td>
+              <td>{{row.Last_name}}</td>
+              <td>{{row.email}}</td>
+              <td>{{row.Phone}}</td>
+              <td>{{row.Address}}</td>
+              <td>{{row.Date_Order}}</td>
+              <td>{{row.Date_Deli}}</td>
+              <td>{{row.States}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="ui bottom attached tab segment" data-tab="second">
+        Second
+      </div>
+      <div class="ui bottom attached tab segment" data-tab="third">
+        Third
+      </div>
+    </div>
+    <div class="four wide column">
+      <div class="ui vertical fluid right tabular menu">
+        <a class="active item" data-tab="first">
+          Available Orders
+        </a>
+        <a class="item" data-tab="second">
+          Accepted Orders
+        </a>
+        <a class="item" data-tab="third">
+          Cancelled Orders
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- grid view -->
+  <!-- <div class="ui attached grid ">
+
+    <div class="eleven wide column">
+      <div class="ui top icon menu">
+        <div class="right menu">
+          <a class="item"><i class="icon record large teal "></i></a>
+          <a class="item"><i class="icon call large teal "></i></a>
+        </div>
+      </div>
+      <div class="hide" id="peer-camera">
+        <video class="my-video" controls autoplay></video>
+      </div>
+    </div>
+
+    <div class="five wide column">
+      some part
+      <div class="ui teal inverted two top attached item menu large">
+        <a class="item " data-tab="first">Friend</a>
+        <a class="item active" data-tab="second">Online User</a>
+      </div>
+
+      <div class="ui bottom attached tab segment " data-tab="first">
+        <div class="ui very relaxed large list selection ">
+          <div class="item">
+            <div class="right floated content">
+              <div class="ui button">Add</div>
+            </div>
+            <img class="ui avatar image" src="">
+            <div class="content">
+              <a class="header">Rachel</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ui bottom attached tab segment active" data-tab="second">
+        <div class="ui very relaxed large list selection" id = "OnlineUsers" ng-repeat="user in OnlineUser">
+          <div class="item">
+            <div class="right floated content">
+                <div id="call" ng-click="call(user)" class="ui green basic button">Call</div>
+        <div id="endcall" ng-click="endCall()" class="ui red basic button hide">Endcall</div>
+            </div>
+            <img class="ui avatar image" src="">
+            <div class="content">
+              <a class="header">{{user}}</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <div class="four wide column">
+      <div id="my-camera">
+        <video class="my-video" controls autoplay></video>
+      </div>
+    </div>
+
+    </div>
+  </div> -->
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+
+    $('.menu .item').tab();
+    $('.ui.dropdown').dropdown();
+
+
+    // var socket = io();
+    // socket.emit('user_send_status_online', your_id);
+
+    var Chatapp = angular.module("Chatapp", []);
+
+      Chatapp.factory('socket', function ($rootScope) {
+        var socket = io.connect();
+
+        return {
+          on: function (eventName, callback) {
+            socket.on(eventName, function () {
+              var args = arguments;
+              $rootScope.$apply(function () {
+                callback.apply(socket, args);
+              });
+            });
+          },
+          emit: function (eventName, data, callback) {
+            socket.emit(eventName, data, function () {
+              var args = arguments;
+              $rootScope.$apply(function () {
+                if (callback) {
+                  callback.apply(socket, args);
+                }
+              });
+            })
+          }
+        };
+      });
+
+      Chatapp.controller("ChatCtrl", function ($scope, $rootScope, socket) {
+        var your_id = '<%=user.email %>'; console.log(your_id);
+
+        $scope.rows  = <%- JSON.stringify(data) %>; console.log($scope.rows);
+
+      });
+  </script>
 </body>
 </html>

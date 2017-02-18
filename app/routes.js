@@ -1,3 +1,6 @@
+var mysql = require('mysql');
+var dbconfig = require('../config/database');
+
 // app/routes.js
 module.exports = function(app, passport) {
 
@@ -18,7 +21,7 @@ module.exports = function(app, passport) {
 
 	// process the login form
 	app.post('/login', passport.authenticate('local-login', {
-            successRedirect : '/profile', // redirect to the secure profile section
+            successRedirect : '/index', // redirect to the secure profile section
             failureRedirect : '/login', // redirect back to the signup page if there is an error
             failureFlash : true // allow flash messages
 		}),
@@ -44,10 +47,43 @@ module.exports = function(app, passport) {
 
 	// process the signup form
 	app.post('/signup', passport.authenticate('local-signup', {
-		successRedirect : '/profile', // redirect to the secure profile section
+		successRedirect : '/index', // redirect to the secure profile section
 		failureRedirect : '/signup', // redirect back to the signup page if there is an error
 		failureFlash : true // allow flash messages
 	}));
+
+	// =====================================
+	// MAINPAGE SECTION =========================
+	// =====================================
+	app.get('/index', isLoggedIn, function(req, res) {
+		var tabledata = [
+				{ Order_id: 'Bloody Mary', First_name: 3 },
+				{ Order_id: 'Martini', First_name: 5 },
+				{ Order_id: 'Scotch', First_name: 10 }
+		]
+		var connection = mysql.createConnection(dbconfig.connection);
+
+		connection.query('USE ' + dbconfig.database);
+		connection.query('SELECT Orders.Order_id, Users.First_name, Users.Last_name, Users.Phone, Users.email, Users.Address, Orders.Date_Order, Orders.Time_Order, Orders.Date_Deli, Orders.Time_Deli, Items.Name, Items.Price , Orders_Detail.Quantity, Orders.Sum, Orders.States \
+		 									FROM Orders, Restaurants, Users, Orders_Detail, Items \
+											WHERE Orders.Restaurant_id = Restaurants.Restaurant_id \
+											and Users.id = Orders.id \
+											and Orders_Detail.Item_id = Items.Item_id \
+											and Orders.Order_id = Orders_Detail.Order_id \
+											and Orders.Restaurant_id = ' + req.user.id + ' ',
+										function (error, results, fields) {
+		  if (error) throw error;
+		  console.log('The solution is: ', results);
+			res.render('index.ejs', {
+				user : req.user, // get the user out of session and pass to template
+				data : results
+			});
+		});
+
+
+	});
+
+
 
 	// =====================================
 	// PROFILE SECTION =========================

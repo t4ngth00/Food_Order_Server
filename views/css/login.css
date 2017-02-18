@@ -94,12 +94,12 @@ input, button {
   stroke: #ff5722;
   fill: #ff5722;
 }
-.svg-logo path {
+/*.svg-logo path {
   stroke-dasharray: 10 ;
   stroke-dashoffset: 1000;
   -webkit-animation: animatePath 20s 0.5s forwards;
           animation: animatePath 20s 0.5s backwards;
-}
+}*/
 
 .login__form {
   position: absolute;
