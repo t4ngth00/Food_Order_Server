@@ -1,0 +1,21 @@
+{
+  "name": "Food-ordering-server",
+  "main": "server.js",
+  "scripts": {
+    "start": "node ./server"
+  },
+  "dependencies": {
+    "bcrypt-nodejs": "*",
+    "body-parser": "*",
+    "connect-flash": "*",
+    "cookie-parser": "*",
+    "ejs": "*",
+    "express": "*",
+    "express-session": "*",
+    "morgan": "*",
+    "mysql": "*",
+    "passport": "*",
+    "passport-local": "*",
+    "socket.io": "*"
+  }
+}
