@@ -56,30 +56,27 @@ module.exports = function(app, passport) {
 	// MAINPAGE SECTION =========================
 	// =====================================
 	app.get('/index', isLoggedIn, function(req, res) {
-		var tabledata = [
-				{ Order_id: 'Bloody Mary', First_name: 3 },
-				{ Order_id: 'Martini', First_name: 5 },
-				{ Order_id: 'Scotch', First_name: 10 }
-		]
+
 		var connection = mysql.createConnection(dbconfig.connection);
 
 		connection.query('USE ' + dbconfig.database);
-		connection.query('SELECT Orders.Order_id, Users.First_name, Users.Last_name, Users.Phone, Users.email, Users.Address, Orders.Date_Order, Orders.Time_Order, Orders.Date_Deli, Orders.Time_Deli, Items.Name, Items.Price , Orders_Detail.Quantity, Orders.Sum, Orders.States \
-		 									FROM Orders, Restaurants, Users, Orders_Detail, Items \
+
+		console.log('Your ID is: ', req.user.id);
+		console.log('Your name is: ', req.user.email);
+
+		connection.query('SELECT Orders.Order_id, Users.First_name, Users.Last_name, Users.Phone, Users.email, Users.Address, Orders.Date_Order, Orders.Time_Order, Orders.Date_Deli, Orders.Time_Deli, Orders.Sum, Orders.Status \
+		 									FROM Orders, Restaurants, Users \
 											WHERE Orders.Restaurant_id = Restaurants.Restaurant_id \
 											and Users.id = Orders.id \
-											and Orders_Detail.Item_id = Items.Item_id \
-											and Orders.Order_id = Orders_Detail.Order_id \
 											and Orders.Restaurant_id = ' + req.user.id + ' ',
-										function (error, results, fields) {
+										function (error, rows, fields) {
 		  if (error) throw error;
-		  console.log('The solution is: ', results);
+		  console.log('The solution is: ', rows);
 			res.render('index.ejs', {
 				user : req.user, // get the user out of session and pass to template
-				data : results
+				data : rows
 			});
 		});
-
 
 	});
 

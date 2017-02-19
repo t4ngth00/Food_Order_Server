@@ -17,9 +17,9 @@
 <body ng-controller="ChatCtrl">
 
   <!-- navigation bar -->
-  <div class="ui top small attached icon menu">
+  <div class="ui top orange attached icon menu">
     <div class="header item">
-      Company name
+      Company {{your_id}}
     </div>
     <a class="item active">
       My Orders
@@ -37,7 +37,7 @@
         </div>
       </div>
       <div class="ui dropdown right icon item ">
-        <i class="icon setting large teal "></i>
+        <i class="icon setting large orange "></i>
         <div class="menu">
           <div class="item">
             <a href="/profile" >Profile</a>
@@ -66,7 +66,7 @@
               <th rowspan="2">Order ID</th>
               <th colspan="5">Customer</th>
               <th rowspan="2">Ordered Date</th>
-              <th rowspan="2">Dilivery Date</th>
+              <th rowspan="2">Delivery Date</th>
               <th rowspan="2">Status</th>
             </tr>
             <tr>
@@ -87,7 +87,7 @@
               <td>{{row.Address}}</td>
               <td>{{row.Date_Order}}</td>
               <td>{{row.Date_Deli}}</td>
-              <td>{{row.States}}</td>
+              <td>{{row.Status}}</td>
             </tr>
           </tbody>
         </table>
@@ -212,7 +212,8 @@
       });
 
       Chatapp.controller("ChatCtrl", function ($scope, $rootScope, socket) {
-        var your_id = '<%=user.email %>'; console.log(your_id);
+
+        $scope.your_id = '<%=user.email %>'; console.log($scope.your_id);
 
         $scope.rows  = <%- JSON.stringify(data) %>; console.log($scope.rows);
 
