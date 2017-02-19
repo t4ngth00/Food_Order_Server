@@ -10,7 +10,12 @@ var morgan = require('morgan');
 var app      = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+var cors = require('cors');
 
+// Enable CORS for all routes
+app.use(cors());
+
+// Set port either heroku or local
 app.set('port', (process.env.PORT || 5000));
 
 var passport = require('passport');

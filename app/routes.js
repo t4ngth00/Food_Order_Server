@@ -3,7 +3,73 @@ var dbconfig = require('../config/database');
 
 // app/routes.js
 module.exports = function(app, passport) {
+// ROUTE FOR MOBILE CLIENTS
+	// =====================================
+	// MAINPAGE SECTION =========================
+	// =====================================
+	app.post('/orders', function(req, res) {
 
+		var connection = mysql.createConnection(dbconfig.connection);
+		connection.query('USE ' + dbconfig.database);
+
+		connection.query('SELECT Orders.Order_id, Users.First_name, Users.Last_name, Restaurants.Name as NameRestaurant, Orders.Status, Orders.Date_Order, Orders.Time_Order, Orders.Date_Deli, Orders.Time_Deli, Orders.Sum \
+		 									FROM Users, Restaurants, Orders \
+											WHERE Orders.Restaurant_id = Restaurants.Restaurant_id \
+											and Users.id = Orders.id \
+											and Orders.id = ' + req.body.id + ' ',
+										function (error, rows, fields) {
+			if (error) throw error;
+			console.log('The solution is: ', rows);
+			res.json(rows);
+		});
+		connection.end();
+	});
+
+	app.post('/clientLogin', function(req, res) {
+		console.log(req.body);
+		var connection = mysql.createConnection(dbconfig.connection);
+		connection.query('USE ' + dbconfig.database);
+
+		connection.query('SELECT * FROM Users WHERE Role_id = 2',
+										function (error, rows, fields) {
+			if (error) throw error;
+			console.log('The solution is: ', rows);
+			var Users = rows;
+
+			var user = Users.find(function(element){
+					 return (element.email === req.body.username) && (element.password === req.body.password);
+			});
+
+			if(user !== undefined)
+			{
+					return res.json({id: user.id, username: user.email});
+			}
+			else
+			{
+					return res.sendStatus(401);
+			}
+		});
+		connection.end();
+
+	});
+	app.post('/clientSignup', function(req, res){
+		var connection = mysql.createConnection(dbconfig.connection);
+		connection.query('USE ' + dbconfig.database);
+
+		connection.query("INSERT INTO Users ( email, password, Role_id ) values (?,?,?)",
+											[req.body.username, req.body.password, "2"],
+											function (error, rows, fields) {
+			if (error) throw error;
+			console.log('The solution is: ', rows);
+			res.sendStatus(200);
+		});
+
+		connection.end();
+
+	})
+
+
+// ROUTE FOR BROWSER CLIENTS
 	// =====================================
 	// LOGIN ===============================
 	// =====================================
@@ -34,7 +100,7 @@ module.exports = function(app, passport) {
               req.session.cookie.expires = false;
             }
         res.redirect('/');
-    });
+  });
 
 	// =====================================
 	// SIGNUP ==============================
@@ -77,10 +143,7 @@ module.exports = function(app, passport) {
 				data : rows
 			});
 		});
-
 	});
-
-
 
 	// =====================================
 	// PROFILE SECTION =========================
