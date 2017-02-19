@@ -66,7 +66,38 @@ module.exports = function(app, passport) {
 
 		connection.end();
 
-	})
+	});
+
+	app.get('/restaurants', function(req, res){
+		var connection = mysql.createConnection(dbconfig.connection);
+		connection.query('USE ' + dbconfig.database);
+
+		connection.query('SELECT * FROM Restaurants',
+										function (error, rows, fields) {
+			if (error) throw error;
+			console.log('The solution is: ', rows);
+
+			res.json(rows);
+		});
+		connection.end();
+	});
+
+	// app.post('/items', function(req, res){
+	// 	var connection = mysql.createConnection(dbconfig.connection);
+	// 	connection.query('USE ' + dbconfig.database);
+
+	// 	connection.query('SELECT Items.Item_id, Items.Restaurant_id, Restaurants.Restaurant_id \
+	// 	 					FROM Items, Restaurants\
+	// 						WHERE Items.Restaurant_id = Restaurants.Restaurant_id \
+	// 						and Users.id = Orders.id \
+	// 						and Orders.id = ' + req.body.id + ' ',
+	// 									function (error, rows, fields) {
+	// 		if (error) throw error;
+	// 		console.log('The solution is: ', rows);
+	// 		res.json(rows);
+	// 	});
+	// 	connection.end();
+	// })
 
 
 // ROUTE FOR BROWSER CLIENTS
