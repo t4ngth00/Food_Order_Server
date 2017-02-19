@@ -17,29 +17,25 @@
 <body ng-controller="ChatCtrl">
 
   <!-- navigation bar -->
-  <div class="ui top orange attached icon menu">
-    <div class="header item">
-      Company {{your_id}}
-    </div>
+  <div class="ui top orange attached labeled icon menu">
+
     <a class="item active">
+      <i class="inbox icon"></i>
       My Orders
     </a>
     <a class="item">
+      <i class="block layout icon"></i>
       My Menu
     </a>
     <div class="right menu">
-      <div class="ui dropdown item">
-        Language <i class="dropdown icon"></i>
-        <div class="menu">
-          <a class="item">English</a>
-          <a class="item">Russian</a>
-          <a class="item">Spanish</a>
-        </div>
+      <div class="header item">
+        <h4 class="ui orange header ">Welcome {{your_id}}!</h4>
       </div>
-      <div class="ui dropdown right icon item ">
-        <i class="icon setting large orange "></i>
-        <div class="menu">
-          <div class="item">
+      <div class="ui dropdown orange right icon item">
+        <i class="icon setting large"></i>
+        Settings
+        <div class="menu ">
+          <div class="item orange">
             <a href="/profile" >Profile</a>
           </div>
           <div class="divider"></div>
@@ -52,22 +48,23 @@
   </div>
 
   <div class="ui grid">
-    <div class="twelve wide stretched column">
+    <div class="thirteen wide stretched column">
       <div class="ui bottom attached tab segment active" data-tab="first">
         <!-- orders table -->
-        <table class="ui teal celled striped table">
-          <thead>
-            <tr><th colspan="9">
+        <table class="ui center aligned celled striped table">
+          <thead class="definition">
+            <tr><th colspan="10">
               Available Orders
             </th>
           </tr></thead>
           <thead>
-            <tr>
+            <tr class="definition">
               <th rowspan="2">Order ID</th>
               <th colspan="5">Customer</th>
               <th rowspan="2">Ordered Date</th>
               <th rowspan="2">Delivery Date</th>
-              <th rowspan="2">Status</th>
+              <th rowspan="2" class="positive">Status</th>
+              <th rowspan="2"></th>
             </tr>
             <tr>
               <th>First name</th>
@@ -87,7 +84,14 @@
               <td>{{row.Address}}</td>
               <td>{{row.Date_Order}}</td>
               <td>{{row.Date_Deli}}</td>
-              <td>{{row.Status}}</td>
+              <td class="positive">{{row.Status}}</td>
+              <td>
+                <div class="ui small buttons">
+                  <button class="ui button">Cancel</button>
+                  <div class="or"></div>
+                  <button class="ui button positive">Accept</button>
+                </div>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -99,8 +103,9 @@
         Third
       </div>
     </div>
-    <div class="four wide column">
-      <div class="ui vertical fluid right tabular menu">
+    <div class="three wide column">
+      <div class="ui vertical fluid right tabular menu orange">
+
         <a class="active item" data-tab="first">
           Available Orders
         </a>
