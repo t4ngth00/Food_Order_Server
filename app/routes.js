@@ -131,6 +131,20 @@ module.exports = function(app, passport) {
 		connection.end();
 	});
 
+	app.post('/account', function(req, res) {
+
+		var connection = mysql.createConnection(dbconfig.connection);
+		connection.query('USE ' + dbconfig.database);
+
+		connection.query('SELECT * FROM Users WHERE Users.id = ' + req.body.id + ' ',
+							function (error, rows, fields) {
+			if (error) throw error;
+			console.log('The solution is: ', rows);
+			res.json(rows);
+		});
+		connection.end();
+	});
+
 	// app.post('/items', function(req, res){
 	// 	var connection = mysql.createConnection(dbconfig.connection);
 	// 	connection.query('USE ' + dbconfig.database);
@@ -223,7 +237,70 @@ module.exports = function(app, passport) {
 				data : rows
 			});
 		});
+		connection.end();
 	});
+
+	app.get('/menu', function(req, res){
+		var connection = mysql.createConnection(dbconfig.connection);
+
+		connection.query('USE ' + dbconfig.database);
+
+		console.log('Your ID is: ', req.user.id);
+		console.log('Your name is: ', req.user.email);
+
+		connection.query('SELECT Items.Item_id, Items.Restaurant_id, Restaurants.Restaurant_id, Items.Name, Items.Description, Items.Item_logo, Items.Price \
+		 					FROM Items, Restaurants \
+							WHERE Items.Restaurant_id = Restaurants.Restaurant_id \
+							and Restaurants.Restaurant_id = ' + req.user.id + ' ',
+								function (error, rows, fields) {
+		  if (error) throw error;
+		  console.log('The solution is: ', rows);
+
+			res.render('menu.ejs', {
+				user: req.user,
+				data: rows
+
+			})
+		});
+		connection.end();
+	});
+
+	app.post('/menu', function(req, res){
+		var connection = mysql.createConnection(dbconfig.connection);
+		connection.query('USE ' + dbconfig.database);
+
+		connection.query("INSERT INTO Items ( name, description, Item_logo, price, Restaurant_id) values (?,?,?,?,?)",
+											[req.body.name, req.body.description,req.body.logo, req.body.price, req.user.id],
+								function (error, rows, fields) {
+		  if (error) throw error;
+		  console.log('The solution is: ', rows);
+
+			res.render('menu.ejs', {
+				user: req.user,
+				data: rows
+
+			})
+		});
+		connection.end();
+	})
+
+	app.delete('/menu', function(req, res){
+		var connection = mysql.createConnection(dbconfig.connection);
+		connection.query('USE ' + dbconfig.database);
+		console.log(req.body);
+		connection.query("DELETE FROM Items WHERE Item_id = " + req.body.Item_id,
+								function (error, rows, fields) {
+		  if (error) throw error;
+		  console.log('The solution is: ', rows);
+
+			res.render('menu.ejs', {
+				user: req.user,
+				data: rows
+
+			})
+		});
+		connection.end();
+	})
 
 	// =====================================
 	// PROFILE SECTION =========================

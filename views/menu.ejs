@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html ng-app="Chatapp">
+<head>
+  <meta charset="UTF-8">
+  <title>Main page</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
+  <link href="css/style.css" rel="stylesheet">
+
+  <!-- semantic UI -->
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.7/semantic.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.7/semantic.js"></script>
+  <!-- angular  -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.0-rc.2/angular.js"></script>
+</head>
+<body ng-controller="MenuCtrl">
+  <!-- navigation bar -->
+  <div class="ui top orange attached labeled icon menu">
+
+    <a class="item" href="/index">
+      <i class="inbox icon"></i>
+      My Orders
+    </a>
+    <a class="item active" href="/menu" >
+      <i class="block layout icon"></i>
+      My Menu
+    </a>
+    <div class="right menu">
+      <div class="header item">
+        <h4 class="ui orange header ">{{your_id}}</h4>
+      </div>
+      <div class="ui dropdown orange right icon item">
+        <i class="icon setting large"></i>
+        Settings
+        <div class="menu ">
+          <div class="item orange">
+            <a href="/profile" >Profile</a>
+          </div>
+          <div class="divider"></div>
+          <div class="item">
+            <a href="/logout" >Log out</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- end nav -->
+<div class="ui grid">
+    <div class="thirteen wide stretched column">
+      <div class="ui bottom attached tab segment active" data-tab="first">
+        <!-- orders table -->
+        <table class="ui center aligned celled striped table">
+          <thead class="definition">
+            <tr><th colspan="5">
+              Menu
+            </th>
+          </tr>
+        </thead>
+          <thead>
+            <tr class="definition">
+              <th>Name</th>
+              <th>Description</th>
+              <th>Item_logo</th>
+              <th>Price</th>
+              <th>Action</th>
+            </tr>
+           
+          </thead>
+          <tbody>
+            <tr ng-repeat="row in rows">
+              <td>{{row.Name}}</td>
+              <td>{{row.Description}}</td>
+              <td>{{row.Item_logo}}</td>
+              <td>{{row.Price}}</td> 
+              <td><div class="ui small buttons">
+                  <button class="ui button" ng-click="EditItem">Edit</button>
+                  <div class="or"></div>
+                  <button class="ui button positive" ng-click="DeleteItem(row)">Delete</button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+          <button class="ui button" id="addItems">Add items</button>
+          <div class="ui basic modal">
+          <div class="ui icon header">
+            <i class="add circle icon"></i>
+            Adding new item
+          </div>
+          <div class="content" style="color: black">
+            <input type="text" placeholder="Name" ng-model="item.name">
+            <input type="text" placeholder="Description" ng-model="item.description">
+            <input type="text" placeholder="Item_logo" ng-model="item.logo">
+            <input type="text" placeholder="Price" ng-model="item.price">
+          </div>
+          <div class="actions">
+            <div class="ui red basic cancel inverted button">
+              <i class="remove icon"></i>
+              No
+            </div>
+            <div class="ui green ok inverted button" id="confirm">
+              <i class="checkmark icon"></i>
+              Yes
+            </div>
+          </div>
+        </div>
+        </div>
+    
+      </div>
+
+        <script type="text/javascript">
+
+         var Chatapp = angular.module("Chatapp", []);
+         Chatapp.controller("MenuCtrl", function ($scope, $rootScope,$http) {
+
+          $scope.your_id = '<%=user.email %>'; console.log($scope.your_id);
+
+          $scope.rows  = <%- JSON.stringify(data) %>; console.log($scope.rows);
+          
+          $('#addItems').click(function(){
+            $('.ui.basic.modal').modal('show');
+        });
+          $('#confirm').click(function(){
+            $http.post("/menu", $scope.item).then(function(res){
+                resolve(res.data);
+            }), function(err){
+                console.log(err);
+            }
+          });
+          $scope.DeleteItem = function(item){
+            console.log(item, item.Item_id);
+            var data = {Item_id: item.Item_id};
+            $http.delete("/menu", data).then(function(res){
+              console.log("Deleted", res.data);
+            }), function(err){
+              console.log(err);
+            }
+          }
+
+        });
+       </script>
+</body>
+</html>
