@@ -137,6 +137,7 @@
 
             $http.post("/menu/delete", data).then(function(res){
               console.log("Deleted", res.data);
+              location.reload();
               resolve();
             }), function(err){
               console.log(err);
