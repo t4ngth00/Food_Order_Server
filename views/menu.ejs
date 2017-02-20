@@ -64,14 +64,14 @@
               <th>Price</th>
               <th>Action</th>
             </tr>
-           
+
           </thead>
           <tbody>
             <tr ng-repeat="row in rows">
               <td>{{row.Name}}</td>
               <td>{{row.Description}}</td>
               <td>{{row.Item_logo}}</td>
-              <td>{{row.Price}}</td> 
+              <td>{{row.Price}}</td>
               <td><div class="ui small buttons">
                   <button class="ui button" ng-click="EditItem">Edit</button>
                   <div class="or"></div>
@@ -106,18 +106,20 @@
           </div>
         </div>
         </div>
-    
+
       </div>
 
         <script type="text/javascript">
+        $('.menu .item').tab();
+        $('.ui.dropdown').dropdown();
 
          var Chatapp = angular.module("Chatapp", []);
-         Chatapp.controller("MenuCtrl", function ($scope, $rootScope,$http) {
+         Chatapp.controller("MenuCtrl", function ($scope, $rootScope, $http, $q) {
 
           $scope.your_id = '<%=user.email %>'; console.log($scope.your_id);
 
           $scope.rows  = <%- JSON.stringify(data) %>; console.log($scope.rows);
-          
+
           $('#addItems').click(function(){
             $('.ui.basic.modal').modal('show');
         });
@@ -131,11 +133,16 @@
           $scope.DeleteItem = function(item){
             console.log(item, item.Item_id);
             var data = {Item_id: item.Item_id};
-            $http.delete("/menu", data).then(function(res){
+            return $q(function(resolve, reject){
+
+            $http.post("/menu/delete", data).then(function(res){
               console.log("Deleted", res.data);
+              resolve();
             }), function(err){
               console.log(err);
+              reject();
             }
+          })
           }
 
         });

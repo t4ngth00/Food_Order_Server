@@ -61,7 +61,8 @@
           <thead>
             <tr class="definition">
               <th rowspan="2">Order ID</th>
-              <th colspan="5">Customer</th>
+              <th rowspan="2">Restaurant name</th>
+              <th colspan="4">Customer</th>
               <th rowspan="2">Ordered Date</th>
               <th rowspan="2">Delivery Date</th>
               <th rowspan="2" class="positive">Status</th>
@@ -70,7 +71,6 @@
             <tr>
               <th>First name</th>
               <th>Last name</th>
-              <th>Email</th>
               <th>Phone number</th>
               <th>Address</th>
             </tr>
@@ -78,9 +78,9 @@
           <tbody>
             <tr ng-repeat="row in rows">
               <td>{{row.Order_id}}</td>
+              <td>{{row.email}}</td>
               <td>{{row.First_name}}</td>
               <td>{{row.Last_name}}</td>
-              <td>{{row.email}}</td>
               <td>{{row.Phone}}</td>
               <td>{{row.Address}}</td>
               <td>{{row.Date_Order}}</td>
