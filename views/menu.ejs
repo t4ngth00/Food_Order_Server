@@ -126,6 +126,7 @@
           $('#confirm').click(function(){
             $http.post("/menu", $scope.item).then(function(res){
                 resolve(res.data);
+                location.reload();
             }), function(err){
                 console.log(err);
             }
