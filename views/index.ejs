@@ -225,7 +225,7 @@
 
         $scope.AcceptOrder = function(id) {
           return $q(function(resolve, reject){
-            $http.post("http://localhost:5000/orders/accept", { Order_id: id}).then(function(response){
+            $http.post("/orders/accept", { Order_id: id}).then(function(response){
                         location.reload();
                         resolve();
                 },function(err){
@@ -236,7 +236,7 @@
 
         $scope.CancelOrder = function(id) {
           return $q(function(resolve, reject){
-            $http.post("http://localhost:5000/orders/cancel", { Order_id: id}).then(function(response){
+            $http.post("/orders/cancel", { Order_id: id}).then(function(response){
                         location.reload();
                         resolve();
                 },function(err){
