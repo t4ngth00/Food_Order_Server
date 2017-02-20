@@ -87,9 +87,9 @@
               <td class="positive">{{row.Status}}</td>
               <td>
                 <div class="ui small buttons">
-                  <button class="ui button">Cancel</button>
+                  <button class="ui button" ng-click="CancelOrder(row.Order_id)">Cancel</button>
                   <div class="or"></div>
-                  <button class="ui button positive">Accept</button>
+                  <button class="ui button positive" ng-click="AcceptOrder(row.Order_id)">Accept</button>
                 </div>
               </td>
             </tr>
@@ -216,12 +216,33 @@
         };
       });
 
-      Chatapp.controller("ChatCtrl", function ($scope, $rootScope, socket) {
+      Chatapp.controller("ChatCtrl", function ($scope, $rootScope, $q, $http, socket) {
 
         $scope.your_id = '<%=user.email %>'; console.log($scope.your_id);
 
         $scope.rows  = <%- JSON.stringify(data) %>; console.log($scope.rows);
 
+        $scope.AcceptOrder = function(id) {
+          return $q(function(resolve, reject){
+            $http.post("http://localhost:5000/orders/accept", { Order_id: id}).then(function(response){
+                        location.reload();
+                        resolve();
+                },function(err){
+                        reject();
+                });
+            });
+        }
+
+        $scope.CancelOrder = function(id) {
+          return $q(function(resolve, reject){
+            $http.post("http://localhost:5000/orders/cancel", { Order_id: id}).then(function(response){
+                        location.reload();
+                        resolve();
+                },function(err){
+                        reject();
+                });
+            });
+        }
       });
   </script>
 </body>

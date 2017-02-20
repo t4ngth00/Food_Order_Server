@@ -25,6 +25,54 @@ module.exports = function(app, passport) {
 		connection.end();
 	});
 
+	app.post('/orders/accept', function(req, res) {
+		console.log(req.body.Order_id);
+		var connection = mysql.createConnection(dbconfig.connection);
+		connection.query('USE ' + dbconfig.database);
+
+		connection.query('UPDATE Orders SET Orders.Status = ? WHERE Order_id = ?',
+		 								["Accepted", req.body.Order_id],
+										function (error, rows, fields) {
+			if (error) throw error;
+			console.log('The solution is: ', rows);
+			res.sendStatus(200);
+		});
+		connection.end();
+	});
+
+	app.post('/orders/cancel', function(req, res) {
+		console.log(req.body.Order_id);
+		var connection = mysql.createConnection(dbconfig.connection);
+		connection.query('USE ' + dbconfig.database);
+
+		connection.query('UPDATE Orders SET Orders.Status = ? WHERE Order_id = ?',
+										["Cancelled", req.body.Order_id],
+										function (error, rows, fields) {
+			if (error) throw error;
+			console.log('The solution is: ', rows);
+			res.sendStatus(200);
+		});
+		connection.end();
+	});
+
+	app.post('/orders/new', function(req, res){
+		var connection = mysql.createConnection(dbconfig.connection);
+		connection.query('USE ' + dbconfig.database);
+
+		connection.query("INSERT INTO Orders ( Order_id, id, Restaurant_id, Status, Sum ) values (?,?,?,?,?)",
+										[	req.body.order_id, req.body.user_id,
+											req.body.restaurant_id, req.body.status,
+											req.body.order_price ],
+											function (error, rows, fields) {
+			if (error) throw error;
+			console.log('The solution is: ', rows);
+			res.sendStatus(200);
+		});
+
+		connection.end();
+
+	});
+
 	app.post('/clientLogin', function(req, res) {
 		console.log(req.body);
 		var connection = mysql.createConnection(dbconfig.connection);
@@ -52,6 +100,7 @@ module.exports = function(app, passport) {
 		connection.end();
 
 	});
+
 	app.post('/clientSignup', function(req, res){
 		var connection = mysql.createConnection(dbconfig.connection);
 		connection.query('USE ' + dbconfig.database);
