@@ -18,5 +18,8 @@
     "passport": "*",
     "passport-local": "*",
     "socket.io": "*"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
   }
 }

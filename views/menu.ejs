@@ -122,7 +122,7 @@
 
           $('#addItems').click(function(){
             $('.ui.basic.modal').modal('show');
-        });
+          });
           $('#confirm').click(function(){
             $http.post("/menu", $scope.item).then(function(res){
                 location.reload();
